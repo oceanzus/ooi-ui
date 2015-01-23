@@ -1,0 +1,127 @@
+{% extends "common/base.html" %}
+
+{% block title %}
+  <title>OOI Science Table Demo</title>
+{% endblock %}
+
+{% block head %}
+  <link href="/css/compiled/index.css" rel="stylesheet" type="text/css" />
+  <!-- partials -->
+  <script src="/js/partials/compiled/index.js" type="text/javascript"></script>
+  <!-- d3 can't be concatenated easily -->
+  <script src="/lib/d3/d3.min.js" type="text/javascript"></script>
+  <script src="/js/compiled/index.js" type="text/javascript"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+<!--/.TOP BAR END -->
+
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper" class="navbar-default">
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong><span class="fa fa-globe"></span> <span data-i18n="Data">Data Table Section</span></strong>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div id ='datatable'></div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-12 -->
+      </div> <!-- row -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong>
+                <span class="fa fa-bar-chart"></span> <span data-i18n="Data">Edit Record Section</span>
+              </strong>
+              <div class="pull-right">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                    Edit Options
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                      <a href="#">Edit Mode</a>
+                    </li>
+                    <li>
+                      <a href="#">Cancel Edits</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="#">Save Edits</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div class="col-sm-12">
+                Panel Body
+              </div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-8 -->
+        <div class="col-lg-4">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong>
+                <span class="fa fa-bar-chart"></span>
+                <span data-i18n="Data">Table Controls</span>
+              </strong>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div class="col-sm-12" id="plotControls">
+                Table controls go here
+              </div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-4 -->
+      </div> <!-- row -->
+    </div> <!-- container-fluid -->
+  </div> <!-- page-content-wrapper -->
+</div>
+
+
+
+  <!-- /#wrapper -->
+
+<!-- Menu Toggle Script -->
+<script type="text/javascript">
+  var navbar = new NavbarView();
+  $('body').prepend(navbar.el);
+  var arrays = new ArrayCollection();
+  var tocView = new TOCView({
+      collection: arrays
+  })
+  $('#sidebar-wrapper').html(tocView.el);
+
+  mapView = new MapView();
+
+
+
+  if(!OOI.LoggedIn()) {
+    var modalView = new ModalDialogView();
+    $('.container-fluid').first().append(modalView.el);
+    modalView.show({
+        message: "INSERT WARRANTY HERE",
+        ack: function() { console.log("Closed"); }
+        //type: "warning"
+    });
+  }
+
+</script>
+{% endblock %}
