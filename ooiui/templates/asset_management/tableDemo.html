@@ -35,7 +35,9 @@
               <strong><span class="fa fa-globe"></span> <span data-i18n="Data">Data Table Section</span></strong>
             </div> <!-- panel-heading -->
             <div class="panel-body">
-              <div id ='datatable'></div>
+              <div id ='datatable'>
+
+              </div>
             </div> <!-- panel-body -->
           </div> <!-- panel -->
         </div> <!-- col-lg-12 -->
@@ -122,6 +124,55 @@
         //type: "warning"
     });
   }
+
+    var columns = [{
+        name: "id", // The key of the model attribute
+        label: "ID", // The name to display in the header
+        editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+        // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
+        cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+        })
+  }, {
+    name: "organization_name",
+    label: "Organization Name",
+    // The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
+    cell: "string" // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+  }];
+
+// Initialize a new Grid instance
+var grid = new Backgrid.Grid({
+  columns: columns,
+  collection: territories
+});
+
+// Render the grid and attach the root to your HTML document
+$("#datatable").append(grid.render().el);
+
+// Fetch some countries from the url
+territories.fetch({reset: true});
+
+$(document).ready(function() {
+  var navbar = new NavbarView();
+  $('body').prepend(navbar.el);
+  var leftPanel = new PanelView({
+    heading: 'Charts',
+    body: "empty text"
+  });
+  $('#panelLeft').html(leftPanel.el);
+  var rightPanel = new PanelView({
+    heading: 'Table goes here',
+    body: '<div class="col-sm-12">Looks funkie</div>'
+  });
+  $('#panelRight').html(rightPanel.el);
+  var chartView = new ChartView();
+  leftPanel.$el.find('.panel-body').html(chartView.el);
+  chartView.render();
+  var fakeTableView = new FakeTableView({
+    collection: new FakeTableCollection()
+  });
+  rightPanel.$el.find('.panel-body').html(fakeTableView.el);
+});
 
 </script>
 {% endblock %}
