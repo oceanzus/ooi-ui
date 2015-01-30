@@ -25,6 +25,10 @@ import math
 def new_index():    
     return render_template('science/index.html')
 
+@app.route('/am')
+def am_index():
+    return render_template('asset_management/tableDemo.html')
+
 @app.route('/landing/pioneer')
 def landing_pioneer():
     return render_template('landing/pioneer.html')

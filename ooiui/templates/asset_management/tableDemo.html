@@ -1,0 +1,181 @@
+{% extends "common/base.html" %}
+
+{% block title %}
+  <title>OOI Backgrid Example</title>
+{% endblock %}
+
+{% block head %}
+  <link href="/css/compiled/index.css" rel="stylesheet" type="text/css" />
+  <!-- partials -->
+  <script src="/js/partials/compiled/index.js" type="text/javascript"></script>
+  <!-- d3 can't be concatenated easily -->
+  <script src="/lib/d3/d3.min.js" type="text/javascript"></script>
+  <script src="/js/compiled/index.js" type="text/javascript"></script>
+  <script src="/js/compiled/tableDemo.js" type="text/javascript"></script>
+  <script src="/lib/backgrid/lib/backgrid.js" type="text/javascript"></script>
+
+{% endblock %}
+
+
+{% block body %}
+
+<!--/.TOP BAR END -->
+
+<div id="wrapper">
+  <!-- Sidebar -->
+  <div id="sidebar-wrapper" class="navbar-default">
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong><span class="fa fa-globe"></span> <span data-i18n="Data">Data Table Section</span></strong>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div id ='datatable'></div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-12 -->
+      </div> <!-- row -->
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong>
+                <span class="fa fa-bar-chart"></span>Record Editor<span data-i18n="Data"></span>
+              </strong>
+              <div class="pull-right">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                    Editor Options
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu pull-right" role="menu">
+                    <li>
+                      <a href="#">Action</a>
+                    </li>
+                    <li>
+                      <a href="#">Another action</a>
+                    </li>
+                    <li>
+                      <a href="#">Something else here</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                      <a href="#">Separated link</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div class="col-sm-12">
+                Panel Body
+              </div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-8 -->
+        <div class="col-lg-4">
+          <div class="panel">
+            <div class="panel-heading">
+              <strong>
+                <span class="fa fa-bar-chart"></span>
+                <span data-i18n="Data">Editor Controls</span>
+              </strong>
+            </div> <!-- panel-heading -->
+            <div class="panel-body">
+              <div class="col-sm-12" id="plotControls">
+                Table editor controls go here
+              </div>
+            </div> <!-- panel-body -->
+          </div> <!-- panel -->
+        </div> <!-- col-lg-4 -->
+      </div> <!-- row -->
+    </div> <!-- container-fluid -->
+  </div> <!-- page-content-wrapper -->
+</div>
+
+
+
+  <!-- /#wrapper -->
+
+<!-- Menu Toggle Script -->
+<script type="text/javascript">
+
+_.extend(OOI.prototype, Backbone.Events, {
+  login: new LoginModel(),
+  start: function() {
+    this.navbar = new NavbarView({
+      login: this.login
+    });
+    $('body').prepend(this.navbar.el);
+
+    this.arrays = new ArrayCollection();
+    this.tocView = new TOCView({
+      collection: this.arrays
+    });
+    $('#sidebar-wrapper').html(this.tocView.el);
+
+    assetView = new AssetView();
+
+{#    var columns = [{
+        name: "id", // The key of the model attribute
+        label: "ID", // The name to display in the header
+        editable: false, // By default every cell in a column is editable, but *ID* shouldn't be
+        // Defines a cell type, and ID is displayed as an integer without the ',' separating 1000s.
+        cell: Backgrid.IntegerCell.extend({
+            orderSeparator: ''
+        })
+    }, {
+        name: "array_name",
+        label: "Name",
+        // The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
+        cell: "string" // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+    }, {
+        name: "array_code",
+        label: "Code",
+        cell: "string" // An integer cell is a number cell that displays humanized integers
+    }, {
+        name: "description",
+        label: "Description",
+        cell: "string" // A cell type for floating point value, defaults to have a precision 2 decimal numbers
+    }, {
+        name: "display_name",
+        label: "Display Name",
+        cell: "string"
+    }];
+
+    // Initialize a new Grid instance
+    var grid = new Backgrid.Grid({
+        columns: columns,
+        collection: this.arrays
+    });
+
+    // Render the grid and attach the root to your HTML document
+    $("#datatable").append(grid.render().el);
+
+    // Fetch some countries from the url
+    this.arrays.fetch({reset: true});#}
+
+    if(!this.login.loggedIn()) {
+      this.modalView = new ModalDialogView();
+      $('.container-fluid').first().append(this.modalView.el);
+      this.modalView.show({
+        message: "INSERT WARRANTY HERE",
+        ack: function() { console.log("Closed"); }
+      });
+    }
+  }
+});
+var ooi = new OOI();
+
+$(document).ready(function() {
+    ooi.start();
+});
+</script>
+{% endblock %}
