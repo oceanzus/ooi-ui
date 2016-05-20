@@ -5,6 +5,34 @@ module.exports = function(grunt) {
     jst: {
       compile: {
         files: {
+          "ooiui/static/js/partials/compiled/home.js": [
+            "ooiui/static/js/partials/home/array_content/ArrayContentSummaryItem.html",
+            "ooiui/static/js/partials/home/array_content/PlatformTable.html",
+            "ooiui/static/js/partials/home/array_content/PlatformTableItem.html"
+          ],
+          "ooiui/static/js/partials/compiled/data_catalog_sidebar.js": [
+            "ooiui/static/js/partials/data_catalog/search_results/SearchResults.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/SearchSidebar.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/SearchInput.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/FilterInput.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/AssetFilters.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/asset_filters/ArrayFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/asset_filters/InstrumentFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/asset_filters/NodeFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/asset_filters/PlatformFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/range_filters/DepthRangeFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/range_filters/TimeRangeFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/stream_filters/StreamDeliveryFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/stream_filters/StreamParameterFilter.html",
+            "ooiui/static/js/partials/data_catalog/search_sidebar/components/filters/stream_filters/StreamTypeFilter.html",
+            "ooiui/static/js/views/data_catalog/search_results/SearchResults.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/SearchSidebar.js",
+            'ooiui/static/js/models/science/StreamModel.js',
+          ],
+          "ooiui/static/js/partials/compiled/platform.js": [
+            'ooiui/static/js/partials/GenericPlatForm.html',
+            'ooiui/static/js/partials/GenericPlatFormTable.html'
+          ],
           "ooiui/static/js/partials/compiled/index.js" : [
             "ooiui/static/js/partials/TOC.html",
             "ooiui/static/js/partials/TOCItem.html",
@@ -328,6 +356,49 @@ module.exports = function(grunt) {
             "ooiui/static/js/partials/Timeseries.html",
             "ooiui/static/js/partials/PlotAnnotationsEventsButtons.html",
           ],
+          "ooiui/static/js/partials/compiled/plotting.js": [
+            "ooiui/static/js/partials/DropdownMessages.html",
+            "ooiui/static/js/partials/DropdownMessage.html",
+            "ooiui/static/js/partials/DropdownUserLoggedIn.html",
+            "ooiui/static/js/partials/DropdownUserLoggedOut.html",
+            "ooiui/static/js/partials/LoginForm.html",
+            "ooiui/static/js/partials/NewEvent.html",
+            "ooiui/static/js/partials/ModalDialog.html",
+            "ooiui/static/js/partials/Navbar.html",
+            "ooiui/static/js/partials/NewsBanner.html",
+            "ooiui/static/js/partials/MenuToggle.html",
+            "ooiui/static/js/partials/Panel.html",
+            "ooiui/static/js/partials/Alert.html",
+            "ooiui/static/js/partials/AnnotationTable.html",
+            "ooiui/static/js/partials/AnnotationTableItem.html",
+            "ooiui/static/js/partials/SVGPlotControl.html",
+            "ooiui/static/js/partials/StreamTable.html",
+            "ooiui/static/js/partials/LargeFormatDataTable.html",
+            "ooiui/static/js/partials/LargeFormatDataTableItem.html",
+            "ooiui/static/js/partials/StreamTableItem.html",
+            "ooiui/static/js/partials/StreamTableItemSubView.html",
+            "ooiui/static/js/partials/AcousticDataTable.html",
+            "ooiui/static/js/partials/AcousticDataTableItem.html",
+            "ooiui/static/js/partials/StreamDownloadForm.html",
+            "ooiui/static/js/partials/ModalForm.html",
+            "ooiui/static/js/partials/ModalDownloadFail.html",
+            "ooiui/static/js/partials/ModalDownload.html",
+            "ooiui/static/js/partials/AnnotationModalForm.html",
+            "ooiui/static/js/partials/LoggedInNavItems.html",
+            "ooiui/static/js/partials/PlottingSelection.html",
+            "ooiui/static/js/partials/FilterPlottingSelection.html",
+            "ooiui/static/js/partials/PlotEvent.html",
+            "ooiui/static/js/partials/PlotEventTableItem.html",
+            "ooiui/static/js/partials/Timeseries.html",
+            "ooiui/static/js/partials/PlotAnnotationsEventsButtons.html",
+
+            "ooiui/static/js/partials/science/plot/PlotControls.html",
+            "ooiui/static/js/partials/science/plot/PlotInstruments.html",
+            "ooiui/static/js/partials/science/plot/PlotInstrumentsItem.html",
+            "ooiui/static/js/partials/science/plot/PlotInstrumentControlItem.html",
+            "ooiui/static/js/partials/science/plot/PlotInstrumentParameterControl.html",
+            "ooiui/static/js/partials/science/plot/Plot.html"
+          ],
           "ooiui/static/js/partials/compiled/plotsDemo.js": [
             "ooiui/static/js/partials/DropdownMessages.html",
             "ooiui/static/js/partials/DropdownMessage.html",
@@ -501,7 +572,6 @@ module.exports = function(grunt) {
             "ooiui/static/css/common/AnnotationTableView.css",
             "ooiui/static/lib/bootstrap-select/dist/css/bootstrap-select.css",
             "ooiui/static/css/common/scienceLayout.css",
-            "ooiui/static/lib/metis-menu/dist/metisMenu.css",
             "ooiui/static/css/common/loginDemo.css",
             "ooiui/static/css/common/newEvent.css",
             "ooiui/static/css/common/ModalForm.css"
@@ -594,6 +664,21 @@ module.exports = function(grunt) {
           }
         },
         files: {
+          "ooiui/static/js/compiled/data_catalog_sidebar.js": [
+            "ooiui/static/js/views/data_catalog/DataCatalog.js",
+            "ooiui/static/js/views/data_catalog/search_results/SearchResults.js",
+            "ooiui/static/js/views/data_catalog/search_results/components/ResultsTable.js",
+            "ooiui/static/js/views/data_catalog/search_results/components/ResultsTableRow.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/SearchSidebar.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/SearchInput.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/FilterInput.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/filters/AssetFilter.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/filters/asset_filters/ArrayFilter.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/filters/asset_filters/PlatformFilter.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/filters/asset_filters/NodeFilter.js",
+            "ooiui/static/js/views/data_catalog/search_sidebar/components/filters/asset_filters/InstrumentFilter.js",
+            "ooiui/static/js/models/science/StreamModel.js"
+          ],
           'ooiui/static/js/compiled/science.js' : [
             // Libs
             'ooiui/static/lib/leaflet/dist/leaflet.js',
@@ -1376,8 +1461,9 @@ module.exports = function(grunt) {
             'ooiui/static/lib/jquery-sticky-table-headers/js/jquery.stickytableheaders.js',
             'ooiui/static/lib/underscore/underscore.js',
             'ooiui/static/lib/backbone/backbone.js',
-            "ooiui/static/lib/loremjs/lorem.js",
+            'ooiui/static/lib/bootbox.js/bootbox.js',
             'ooiui/static/lib/moment/moment.js',
+            'ooiui/static/lib/bootstrap-daterangepicker/daterangepicker.js',
             'ooiui/static/lib/bootstrap3-datetimepicker/src/js/bootstrap-datetimepicker.js',
             'ooiui/static/lib/bootstrap-select/dist/js/bootstrap-select.js',
             'ooiui/static/lib/backbone.stickit/backbone.stickit.js',
@@ -1393,15 +1479,14 @@ module.exports = function(grunt) {
             'ooiui/static/js/models/common/DataSubscriptionModel.js',
             'ooiui/static/js/models/science/StreamModel.js',
             'ooiui/static/js/models/science/FilterSelectionModel.js',
-            'ooiui/static/js/models/science/TocArrayModel.js',
-            'ooiui/static/js/models/science/TocInstrumentsModel.js',
-            'ooiui/static/js/models/science/TocMooringsModel.js',
-            'ooiui/static/js/models/science/TocParametersModel.js',
-            'ooiui/static/js/models/science/TocPlatformsModel.js',
-            'ooiui/static/js/models/science/TocStreamsModel.js',
-            'ooiui/static/js/models/science/StreamModel.js',
+            'ooiui/static/js/models/science/SeriesModel.js',
             'ooiui/static/js/models/science/LargeDataFormatModel.js',
             'ooiui/static/js/models/science/PlotEventModel.js',
+            'ooiui/static/js/models/science/ParameterModel.js',
+            'ooiui/static/js/models/science/PlotControlModel.js',
+            'ooiui/static/js/models/science/PlotTimeModel.js',
+            'ooiui/static/js/models/science/DefaultPlotModel.js',
+
             // Views
             'ooiui/static/js/views/common/DropdownMessagesView.js',
             'ooiui/static/js/views/common/DropdownUserView.js',
@@ -1413,17 +1498,21 @@ module.exports = function(grunt) {
             'ooiui/static/js/views/common/ModalFormView.js',
             'ooiui/static/js/views/common/PanelView.js',
             'ooiui/static/js/views/common/WatchView.js',
-            'ooiui/static/js/views/common/SVGView.js',
+            'ooiui/static/js/views/common/ModalDownloadFailView.js',
             'ooiui/static/js/views/common/AnnotationModalFormView.js',
+            'ooiui/static/js/views/science/PlotEventListView.js',
             'ooiui/static/js/views/science/AnnotationTableView.js',
+            'ooiui/static/js/views/common/ModalDownloadView.js',
             'ooiui/static/js/views/science/StreamDownloadFormView.js',
             'ooiui/static/js/views/science/LargeDataTableView.js',
-            'ooiui/static/js/views/science/PlottingSelectionView.js',
-            'ooiui/static/js/views/science/PlotEventListView.js',
-            'ooiui/static/js/views/science/HighChartsXYScatterView.js',
-            'ooiui/static/js/views/science/HighChartsXYView.js',
             'ooiui/static/js/views/science/PlotAnnotationsEventsButtonView.js',
-            //'ooiui/static/js/views/science/FilterPlottingSelectionView.js'
+            // ADDED
+            'ooiui/static/js/views/science/plot/PlotControlView.js',
+            'ooiui/static/js/views/science/plot/PlotInstrumentView.js',
+            'ooiui/static/js/views/science/plot/BasePlot.js',
+            'ooiui/static/js/views/science/plot/PlotView.js',
+            'ooiui/static/js/views/science/plot/XYPlotView.js',
+            'ooiui/static/js/views/science/plot/ImagePlotView.js',
           ],
           'ooiui/static/js/compiled/camera_media.js' : [
             // Libs
@@ -1690,6 +1779,13 @@ module.exports = function(grunt) {
            // 'ooiui/static/js/views/common/TermsDialogView.js',
            // 'ooiui/static/js/views/common/UserFormView.js'
         ],
+        "ooiui/static/js/compiled/genericPlatForms.js": [
+            'ooiui/static/js/models/asset_management/PlatformModel.js',
+            'ooiui/static/js/models/science/StreamModel.js',
+            'ooiui/static/js/views/platforms/GenericPlatFormView.js',
+            'ooiui/static/js/views/platforms/GenericPlatFormTableView.js',
+        ]
+
         }
       },
       css: {
