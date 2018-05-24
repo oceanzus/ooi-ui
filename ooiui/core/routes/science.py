@@ -11,6 +11,7 @@ from ooiui.core.routes.common import get_login, login_required
 import requests
 from ooiui.core.routes.decorators import login_required, scope_required
 import json
+from werkzeug.utils import escape
 
 @app.route('/cilogonhome')
 def new_index():
@@ -130,11 +131,11 @@ def getUframeDataProxy():
     gets data in the google chart format
     '''
     try:
-        instr = request.args['instrument']
-        stream = request.args['stream']
+        instr = escape(request.args['instrument'])
+        stream = escape(request.args['stream'])
         # comma list
-        xvars = request.args['xvars']
-        yvars = request.args['yvars']
+        xvars = escape(request.args['xvars'])
+        yvars = escape(request.args['yvars'])
 
         # there should be a start and end date in the params
         # ?startdate=2015-01-21T22:01:48.103Z&enddate=2015-04-29T10:10:51.563Z
@@ -158,14 +159,14 @@ def getUframeMultiStreamInterp():
     '''
     try:
         # Parse the parameters
-        ref_des1 = request.args['ref_des1']
-        ref_des2 = request.args['ref_des2']
-        instr1 = request.args['instr1']
-        instr2 = request.args['instr2']
-        var1 = request.args['var1']
-        var2 = request.args['var2']
-        startdate = request.args['startdate']
-        enddate = request.args['enddate']
+        ref_des1 = esacpe(request.args['ref_des1'])
+        ref_des2 = escape(request.args['ref_des2'])
+        instr1 = escape(request.args['instr1'])
+        instr2 = escape(request.args['instr2'])
+        var1 = escape(request.args['var1'])
+        var2 = escape(request.args['var2'])
+        startdate = escape(request.args['startdate'])
+        enddate = escape(request.args['enddate'])
 
         # Build the URL
         params = '?startdate=%s&enddate=%s' % (startdate, enddate)
@@ -193,8 +194,8 @@ def get_uframe_large_format_data():
     '''
     try:
         # Parse the parameters
-        ref_des = request.args['ref_des']
-        date = request.args['date']  # Expecting ISO format <yyyy-mm-dd>
+        ref_des = escape(request.args['ref_des'])
+        date = escape(request.args['date'])  # Expecting ISO format <yyyy-mm-dd>
 
         # Build the URL
         data_url = "/".join([app.config['SERVICES_URL'], 'uframe/get_large_format_files_by_ref', ref_des, date])
@@ -274,7 +275,7 @@ def status_arrays():
 @app.route('/api/uframe/status/sites/<string:array_code>')
 def status_sites(array_code):
     if request.args:
-        array_code = request.args['node']
+        array_code = escape(request.args['node'])
     response = requests.get(app.config['SERVICES_URL'] + '/uframe/status/sites/%s' % array_code, params=request.args)
     return response.text, response.status_code
 
@@ -282,7 +283,7 @@ def status_sites(array_code):
 @app.route('/api/uframe/status/sites')
 def status_sites_tree():
     if request.args:
-        array_code = request.args['node']
+        array_code = escape(request.args['node'])
     else:
         return "Bad node parameter", 400
     response = requests.get(app.config['SERVICES_URL'] + '/uframe/status/sites/%s' % array_code, params=request.args)
@@ -539,7 +540,7 @@ def asset_event_post():
 
 @app.route('/api/events', methods=['GET'])
 def get_event_by_ref_des():
-    response = requests.get(app.config['SERVICES_URL'] + '/uframe/events?ref_des=%s' % request.args.get('ref_des'), data=request.args)
+    response = requests.get(app.config['SERVICES_URL'] + '/uframe/events?ref_des=%s' % escape(request.args.get('ref_des')), data=request.args)
     return response.text, response.status_code
 
 
@@ -551,7 +552,7 @@ def op_log():
 @app.route('/api/uframe/stream', methods=['GET'])
 def stream_proxy():
     token = get_login()
-    search_request_arg = request.args.get('search','')
+    search_request_arg = escape(request.args.get('search',''))
     if len(search_request_arg) > 0 or len(request.args) == 0:
         response = requests.get(app.config['SERVICES_URL'] + '/uframe/stream', auth=(token, ''), params=request.args)
         return response.text, response.status_code
@@ -563,7 +564,7 @@ def stream_proxy():
 def stream_for_model():
     token = get_login()
     if len(request.args) > 0:
-        response = requests.get(app.config['SERVICES_URL'] + '/uframe/get_stream_for_model/%s/%s/%s' % (request.args.get('ref_des',''), request.args.get('stream_method',''), request.args.get('stream','')), auth=(token, ''), params=request.args)
+        response = requests.get(app.config['SERVICES_URL'] + '/uframe/get_stream_for_model/%s/%s/%s' % (escape(request.args.get('ref_des','')), escape(request.args.get('stream_method','')), escape(request.args.get('stream',''))), auth=(token, ''), params=request.args)
         return response.text, response.status_code
     else:
         return {}, 400
@@ -610,9 +611,9 @@ def get_stream_parameters(reference_des, stream_method, stream):
 def get_csv(stream_name, reference_designator, start, end):
     token = get_login()
     dpa = "1"
-    user = request.args.get('user', '')
-    email = request.args.get('email', '')
-    parameters = request.args.get('parameters', '')
+    user = escape(request.args.get('user', ''))
+    email = escape(request.args.get('email', ''))
+    parameters = escape(request.args.get('parameters', ''))
     url = app.config['SERVICES_URL'] + '/uframe/get_csv/%s/%s/%s/%s/%s?user=%s&email=%s&parameters=%s' % (stream_name, reference_designator, start, end, dpa, user, email, parameters)
     req = requests.get(url, auth=(token, ''), stream=True)
     return Response(stream_with_context(req.iter_content(chunk_size=1024*1024*4)), headers=dict(req.headers))
@@ -622,9 +623,9 @@ def get_csv(stream_name, reference_designator, start, end):
 def get_json(stream_name, reference_designator, start, end, provenance, annotations):
     token = get_login()
     dpa = "0"
-    user = request.args.get('user', '')
-    email = request.args.get('email', '')
-    parameters = request.args.get('parameters', '')
+    user = escape(request.args.get('user', ''))
+    email = escape(request.args.get('email', ''))
+    parameters = escape(request.args.get('parameters', ''))
     url = app.config['SERVICES_URL'] + '/uframe/get_json/%s/%s/%s/%s/%s/%s/%s?user=%s&email=%s&parameters=%s' % (stream_name, reference_designator, start, end, dpa, provenance, annotations, user, email, parameters)
     req = requests.get(url, auth=(token, ''), stream=True, params=request.args)
     return Response(stream_with_context(req.iter_content(chunk_size=1024*1024*4)), headers=dict(req.headers))
@@ -634,9 +635,9 @@ def get_json(stream_name, reference_designator, start, end, provenance, annotati
 def get_netcdf(stream_name, reference_designator, start, end, provenance, annotations):
     token = get_login()
     dpa = "0"
-    user = request.args.get('user', '')
-    email = request.args.get('email', '')
-    parameters = request.args.get('parameters', '')
+    user = escape(request.args.get('user', ''))
+    email = escape(request.args.get('email', ''))
+    parameters = escape(request.args.get('parameters', ''))
     req = requests.get(app.config['SERVICES_URL'] + '/uframe/get_netcdf/%s/%s/%s/%s/%s/%s/%s?user=%s&email=%s&parameters=%s'
                        % (stream_name, reference_designator, start, end, dpa, provenance, annotations, user, email, parameters), auth=(token, ''), stream=True)
     return Response(stream_with_context(req.iter_content(chunk_size=1024*1024*4)), headers=dict(req.headers))
