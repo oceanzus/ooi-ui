@@ -9,6 +9,7 @@ import sys, os, time, difflib
 import yaml
 import json, smtplib, string
 from itsdangerous import TimestampSigner, URLSafeSerializer
+from werkzeug.utils import escape
 
 def generate_csrf_token():
     if '_csrf_token' not in session:
@@ -321,7 +322,7 @@ def subscription_get():
         return jsonify(error="email address not set"), 401
     try:
         if token:
-            email = request.args['email']
+            email = escape(request.args['email'])
 
             response = requests.get(app.config['SERVICES_URL']+'/uframe/subscription', params=request.args)
             data = response.json()
