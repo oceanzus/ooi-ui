@@ -44,7 +44,7 @@ var LoginView = Backbone.View.extend({
         }
         // We want to look at the cookies for the token
         this.model.fetch();
-        if(this.model.get('token') == "") {
+        if(this.model.get('token') === "") {
             // Need to prompt for login since we don't have a current token
             this.render();
         } else {
@@ -113,11 +113,15 @@ var LoginView = Backbone.View.extend({
             password: this.$el.find('#passInput').val()
         });
 
+        console.log('LoginView - login');
+
         this.model.logIn();
-        //console.log('returning from LoginModel logIn');
-        //console.log(this);
+        console.log(this.model);
+
+        console.log('returning from LoginModel logIn');
+
         // If login was successful and we have a token
-        if(this.model.get('token') != '') {
+        if(this.model.get('token') !== '') {
             //console.log("success");
             this.hide();
             this.success();
@@ -125,9 +129,9 @@ var LoginView = Backbone.View.extend({
             date.setTime(date.getTime() + 12500*1000);
             // console.log('ooiusertoken');
             // console.log(this.model.get('token'));
-            $.cookie('ooiusertoken', this.model.get('token'), {expires: date, path: '/'});
+            $.cookie('ooiusertoken', this.model.get('token'), {expires: null, path: '/'});
             // ooi.trigger('login:success');
-            console.log(window.location.pathname);
+            // console.log(window.location.pathname);
             if(window.location.pathname === '/signup'){
                 window.location.replace("/");
             }else{

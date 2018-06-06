@@ -1,7 +1,7 @@
 from ooiui.core.app import app
 from flask import request, render_template, Response, jsonify, session, make_response, redirect, url_for
 from werkzeug.exceptions import Unauthorized
-from ooiui.core.routes.decorators import login_required, get_login, scope_required
+from ooiui.core.routes.decorators import login_required, get_login, scope_required, noindex
 import requests
 import json
 from uuid import uuid4
@@ -63,6 +63,7 @@ def create_ticket():
     return render_template('common/troubleTicket.html', tracking=app.config['GOOGLE_ANALYTICS'])
 
 @app.route('/login')
+@noindex
 def user_login():
     return render_template('common/loginDemo.html', tracking=app.config['GOOGLE_ANALYTICS'])
 
@@ -346,7 +347,9 @@ def subscription_delete(id):
     response = requests.delete(app.config['SERVICES_URL']+'/uframe/subscription/'+str(id), params=request.args, auth=(token, ''))
     return response.text, response.status_code
 
+
 @app.route('/api/login', methods=['POST'])
+@noindex
 def login():
     local_context = json.loads(request.data)
     username = local_context['login']

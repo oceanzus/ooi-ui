@@ -14,7 +14,7 @@ var LoginModel = Backbone.Model.extend({
         var date = new Date();
         date.setTime(date.getTime() + (model.get('expiration') * 1000));
         // Set the cookie with both the path for the entire site and expire option
-        $.cookie('ooiusertoken', model.get('token'), {path: '/', expires: date});
+        //$.cookie('ooiusertoken', model.get('token'), {path: '/', expires: date});
         ooi.trigger('login:success');
       },
       error: function(model, response, options) {
