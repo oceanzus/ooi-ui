@@ -37,7 +37,9 @@
     <script src="/lib/packery/dist/packery.pkgd.js" type="text/javascript"></script>
     <script src="/lib/isotope-packery/packery-mode.pkgd.js" type="text/javascript"></script>
 
-    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <script src="/js/core/wavesurfer.js/wavesurfer.js" type="text/javascript"></script>
+    <script src="/js/core/wavesurfer.js/plugin/wavesurfer.cursor.js" type="text/javascript"></script>
+    <script src="/js/core/wavesurfer.js/plugin/wavesurfer.mediasession.js" type="text/javascript"></script>
 
     <!--
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -253,6 +255,18 @@
 
         <div class="row">
             <div class="col-md-12" id="wav-player-div" hidden>
+                <div class="controls">
+                <div class="row">
+                    <div class="col-sm-7">
+                        <button class="btn btn-primary" data-action="play">
+                            <i class="glyphicon glyphicon-play"></i>
+                            Play /
+                            <i class="glyphicon glyphicon-pause"></i>
+                            Pause
+                        </button>
+                    </div>
+                </div>
+            </div>
                 <div id='waveform'></div>
             </div>
             <div class="col-md-12">
@@ -939,13 +953,24 @@ let xhr = { cache: 'default', mode: 'cors', method: 'GET', credentials: 'same-or
 
     let wavesurfer = WaveSurfer.create({
         container: '#waveform',
-        backend: 'MediaElement',
+        //backend: 'MediaElement',
         backgroundColor: '#00a3de',
         waveColor: '#004f88',
         xhr: xhr,
         normalize: true,
         mediaControls: true,
-        splitChannels: true
+        plugins: [
+        WaveSurfer.cursor.create({
+            showTime: true,
+            opacity: 1,
+            customShowTimeStyle: {
+                'background-color': '#000',
+                color: '#fff',
+                padding: '2px',
+                'font-size': '10px'
+            }
+        })
+    ]
     });
 
     wavesurfer.on('ready', function () {
@@ -957,13 +982,12 @@ let xhr = { cache: 'default', mode: 'cors', method: 'GET', credentials: 'same-or
         var context = new AudioContext();
         // Setup all nodes
         wavesurfer.audioContext = context;
-        {#document.querySelector('button').addEventListener('click', function() {#}
-        {#    context.resume().then(() => {#}
-        {#        console.log('Playback resumed successfully');#}
-        {#    });#}
-        {#    wavesurfer.playPause();#}
-        {#});#}
-        let isPlayingHYDBB = wavesurfer.isPlaying()
+        document.querySelector('button').addEventListener('click', function() {
+            context.resume().then(() => {
+                console.log('Playback resumed successfully');
+            });
+            wavesurfer.playPause();
+        });
     };
 
         $(document).ready(function() {

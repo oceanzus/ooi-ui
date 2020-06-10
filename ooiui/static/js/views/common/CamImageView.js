@@ -452,7 +452,7 @@ var CamImageView2 = Backbone.View.extend({
         this.$el.html(this.template(options));
 
         $('#wav-player-div').hide();
-        wavesurfer.pause();
+        // wavesurfer.pause();
 
         if(options['first_time']){
             $('#days-group-drop').hide();
