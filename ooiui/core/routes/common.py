@@ -540,6 +540,15 @@ def get_hydbb_test(ref_des, year, month, day):
     response = requests.get('http://ec2-3-213-152-122.compute-1.amazonaws.com:8000/mediaserver/view_get_thumbnails?instrument_id=%s&year=%s&month=%s&day=%s' % (ref_des, year, month, day), auth=(token, ''), data=request.args)
     return response.text, response.status_code
 
+@app.route('/api/uframe/get_wav_file/<string:wav_name>', methods=['GET'])
+def get_hydbb_wav_file(wav_name):
+    token = get_login()
+    r = requests.get('http://ec2-3-213-152-122.compute-1.amazonaws.com:8088/keryx_data/wav_files/'+wav_name, auth=(token, ''), data=request.args)
+    #make pass through
+    response = make_response(r.content)
+    response.headers['Content-Type'] = 'audio/wav'
+    return response
+
 @app.route('/api/uframe/media/test', methods=['GET'])
 def get_uframe_media_range_test():
     token = get_login()

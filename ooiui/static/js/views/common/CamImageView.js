@@ -626,9 +626,10 @@ var CamImageItemView3 = Backbone.View.extend({
         //console.log(self.model);
         if (!_.isUndefined(self.model.get('url'))){
             var text = "<small>"+self.model.get("date")+"</small>";
-            let wav_file = self.model.get("url").replace('.png', '.wav').replace('thumbnails', 'wav_files');
+            //let wav_file = self.model.get("url").replace('.png', '.wav').replace('thumbnails', 'wav_files');
+            let wav_file = self.model.get("thumbnail_name").replace('.png', '.wav');
             console.log(wav_file);
-            wavesurfer.load(wav_file);
+            wavesurfer.load('/api/uframe/get_wav_file/'+wav_file);
             $('#wav-player-div').show();
             bootbox.dialog({
                 title: "<h5>"+self.model.get("reference_designator")+"</h5>"+text,
