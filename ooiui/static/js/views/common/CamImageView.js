@@ -427,6 +427,7 @@ var CamImageView2 = Backbone.View.extend({
                 });
             // });
         } else {
+            $('#days-group-drop').hide();
             $.when(self.collectionMap.fetch({url: '/api/uframe/media/'+instrumentGroup+'/da/map'})).done(function(data){
                 //console.log(data);
                 self.daMap = data;
