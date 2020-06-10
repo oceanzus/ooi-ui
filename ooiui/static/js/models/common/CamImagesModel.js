@@ -159,3 +159,21 @@ var CamImageVocabCollection = Backbone.Collection.extend({
   }
 });
 
+var CamImageHydbbModel = Backbone.Model.extend({
+  urlRoot: '#',
+  defaults: {
+      baseUrl: ""
+  }
+});
+
+var CamImageHydbbCollection = Backbone.Collection.extend({
+  url: '', // /api/uframe/media/vocab/<string:ref_des>
+  model: CamImageHydbbModel,
+  parse: function(response) {
+    if(response) {
+      return response;
+    }
+    return [];
+  }
+});
+

@@ -137,6 +137,7 @@ module.exports = function(grunt) {
             "ooiui/static/js/partials/CameraControls.html",
             "ooiui/static/js/partials/CamImageItem.html",
             "ooiui/static/js/partials/CamImageItem2.html",
+            "ooiui/static/js/partials/CamImageItem3.html",
           ],
           "ooiui/static/js/partials/compiled/loginDemo.js": [
             /*

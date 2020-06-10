@@ -100,6 +100,8 @@ var CamImageView2 = Backbone.View.extend({
     selectedRefDes: null,
     selectedYear: null,
     selectedMonth: null,
+    selectedDay: null,
+    selectedInstrumentGroup: null,
     events: {
         //'click input[name="instrument-types"]' : "instrumentTypeSelection",
         //"click .button#years-group" : "yearsButtonClick",
@@ -112,6 +114,7 @@ var CamImageView2 = Backbone.View.extend({
             "instrumentTypeSelection",
             "yearsButtonClick",
             "monthsButtonClick",
+            "daysButtonClick",
             "filterButtonClick",
             "clickInstrumentsGroup"
             );
@@ -131,6 +134,7 @@ var CamImageView2 = Backbone.View.extend({
         //event.preventDefault();
 
         let self = this;
+        wavesurfer.pause();
         //var filterValue = $( this ).attr('data-filter');
         // use filterFn if matches value
         //filterValue = filterFns[ filterValue ] || filterValue;
@@ -143,6 +147,7 @@ var CamImageView2 = Backbone.View.extend({
         // set filter for group
         self.filters[ filterGroup ] = event.target.attributes['data-filter-group'].value;
         let instrumentGroup = event.target.selectedOptions[0].title;
+        self.selectedInstrumentGroup = instrumentGroup;
         //console.log('filters');
         //console.log(filters);
         // combine filters
@@ -172,21 +177,44 @@ var CamImageView2 = Backbone.View.extend({
 
         let instrumentsSortedHtml = [];
 
-        $.when(self.collectionInstruments.fetch({url: '/api/uframe/media/get_instrument_list/'+instrumentGroup})).done(function(data){
-            //console.log(data);
-            $('#instruments-group').empty();
-            //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
-            let instrumentsSorted = data.instruments.sort();
+        console.log(self.selectedInstrumentGroup);
+        if (self.selectedInstrumentGroup === 'HYDBB') {
+            $('#days-group-drop').show();
+            // $.when(self.collectionInstruments.fetch({url: '/api/uframe/media/get_instrument_list/'+instrumentGroup})).done(function(data){
+                //console.log(data);
+                $('#instruments-group').empty();
+                //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
+                // let instrumentsSorted = data.instruments.sort();
+                let instrumentsSorted = ['CE02SHBP-LJ01D-11-HYDBBA106'];
 
-            $('#instruments-group').append('<option class="button" title="Select Instrument" disabled selected>Select Instrument</option>');
-            $.each(instrumentsSorted, function(key, instrument){
-                //$.when(self.collectionVocab.fetch({url: '/api/uframe/streams_for/'+instrument})).done(function (vocab) {
-                $.when(self.collectionVocab.fetch({url: '/api/uframe/media/get_display_name/'+instrument})).done(function (vocab) {
-                    //console.log(vocab);
-                    $('#instruments-group').append('<option class="button" data-filter=".'+instrument+'" title="'+instrument+'" data-ref_des="'+instrument+'" data-long_name="'+vocab.vocab.long_name+'">'+vocab.vocab.long_name+'</option>');
-                });
-            })
-        });
+                $('#instruments-group').append('<option class="button" title="Select Instrument" disabled selected>Select Instrument</option>');
+                $.each(instrumentsSorted, function(key, instrument){
+                    //$.when(self.collectionVocab.fetch({url: '/api/uframe/streams_for/'+instrument})).done(function (vocab) {
+                    $.when(self.collectionVocab.fetch({url: '/api/uframe/media/get_display_name/'+instrument})).done(function (vocab) {
+                        //console.log(vocab);
+                        $('#instruments-group').append('<option class="button" data-filter=".'+instrument+'" title="'+instrument+'" data-ref_des="'+instrument+'" data-long_name="'+vocab.vocab.long_name+'">'+vocab.vocab.long_name+'</option>');
+                    });
+                })
+            // });
+        } else {
+            $('#days-group-drop').hide();
+            $.when(self.collectionInstruments.fetch({url: '/api/uframe/media/get_instrument_list/'+instrumentGroup})).done(function(data){
+                //console.log(data);
+                $('#instruments-group').empty();
+                //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
+                let instrumentsSorted = data.instruments.sort();
+
+                $('#instruments-group').append('<option class="button" title="Select Instrument" disabled selected>Select Instrument</option>');
+                $.each(instrumentsSorted, function(key, instrument){
+                    //$.when(self.collectionVocab.fetch({url: '/api/uframe/streams_for/'+instrument})).done(function (vocab) {
+                    $.when(self.collectionVocab.fetch({url: '/api/uframe/media/get_display_name/'+instrument})).done(function (vocab) {
+                        //console.log(vocab);
+                        $('#instruments-group').append('<option class="button" data-filter=".'+instrument+'" title="'+instrument+'" data-ref_des="'+instrument+'" data-long_name="'+vocab.vocab.long_name+'">'+vocab.vocab.long_name+'</option>');
+                    });
+                })
+            });
+        }
+
         //$('#inst-type-menu-btn').removeClass('is-checked');
     },
     yearsButtonClick:function(event){
@@ -196,11 +224,15 @@ var CamImageView2 = Backbone.View.extend({
 
         let self = this;
 
+        wavesurfer.pause();
+
         // Clicked on a year
         // Go get the months
         let $button = $( event.currentTarget );
         let selectedYear = event.target.selectedOptions[0].value;
+        self.selectedYear = selectedYear;
         let ref_des = event.target.selectedOptions[0].dataset['ref_des'];
+        self.selectedRefDes = ref_des;
 
         $('.element-item').remove();
         $('#days-group').empty();
@@ -213,17 +245,34 @@ var CamImageView2 = Backbone.View.extend({
 
         // Populate the months
         self.collectionMonths.reset();
-        $.when(self.collectionMonths.fetch({url: '/api/uframe/media/'+ref_des+'/da/'+selectedYear}).done(function (data) {
-            //console.log('months');
-            //console.log(data);
+        if (self.selectedInstrumentGroup === 'HYDBB') {
+            $('#days-group-drop').show();
+            // $.when(self.collectionMonths.fetch({url: '/api/uframe/media/'+ref_des+'/da/'+selectedYear}).done(function (data) {
+                //console.log('months');
+                //console.log(data);
+                let months = ['1', '6'];
+                $('#months-group').empty();
+                //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
+                $('#months-group').append('<option class="button" title="Select Month" disabled selected>Select Month</option>');
+                $.each(months, function(key, month){
+                    $('#months-group').append('<option class="button" data-filter=".'+month+'" title="'+month+'" data-ref_des="'+ref_des+'">'+month+'</option>');
+                })
+            // }))
+        } else {
+            $('#days-group-drop').hide();
+            $.when(self.collectionMonths.fetch({url: '/api/uframe/media/'+ref_des+'/da/'+selectedYear}).done(function (data) {
+                //console.log('months');
+                //console.log(data);
 
-            $('#months-group').empty();
-            //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
-            $('#months-group').append('<option class="button" title="Select Month" disabled selected>Select Month</option>');
-            $.each(data.months, function(key, month){
-                $('#months-group').append('<option class="button" data-filter=".'+month+'" title="'+month+'" data-ref_des="'+ref_des+'">'+month+'</option>');
-            })
-        }))
+                $('#months-group').empty();
+                //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
+                $('#months-group').append('<option class="button" title="Select Month" disabled selected>Select Month</option>');
+                $.each(data.months, function(key, month){
+                    $('#months-group').append('<option class="button" data-filter=".'+month+'" title="'+month+'" data-ref_des="'+ref_des+'">'+month+'</option>');
+                })
+            }))
+        }
+
     },
     monthsButtonClick:function(event){
         //console.log('monthsButtonClick');
@@ -232,10 +281,13 @@ var CamImageView2 = Backbone.View.extend({
 
         let self = this;
 
+        wavesurfer.pause();
+
         // Clicked on a year
         // Go get the months
         let $button = $( event.currentTarget );
         let selectedMonth = event.target.selectedOptions[0].title;
+        self.selectedMonth = selectedMonth;
         let ref_des = event.target.selectedOptions[0].dataset['ref_des'];
 
         $('.element-item').remove();
@@ -243,27 +295,62 @@ var CamImageView2 = Backbone.View.extend({
         $('#selected-month-btn').empty();
         $('#selected-month-btn').append(selectedMonth);
 
-        // Fetch the thumbnails and re-render
-        self.collectionDataBounds.reset();
-        $.when(self.collectionDataBounds.fetch({url: '/api/uframe/media/get_data_bounds/'+ref_des})).done(function(data){
-            let first_date = data.bounds['first_date'];
-            let last_date = data.bounds['last_date'];
+        if (self.selectedInstrumentGroup === 'HYDBB') {
+            $('#days-group-drop').show();
+            let days = ['1', '10', '20'];
+            $('#days-group').empty();
+            //$('#instruments-group').append('<button class="button is-checked" data-filter="*">Choose Instrument</button>');
+            $('#days-group').append('<option class="button" title="Select Day" disabled selected>Select Day</option>');
+            $.each(days, function(key, day){
+                $('#days-group').append('<option class="button" data-filter=".'+day+'" title="'+day+'" data-ref_des="'+ref_des+'">'+day+'</option>');
+            })
+        } else {
+            $('#days-group-drop').hide();
+            // Fetch the thumbnails and re-render
+            self.collectionDataBounds.reset();
+            $.when(self.collectionDataBounds.fetch({url: '/api/uframe/media/get_data_bounds/'+ref_des})).done(function(data){
+                let first_date = data.bounds['first_date'];
+                let last_date = data.bounds['last_date'];
 
-            let chosenYear = $('#years-group').val();
-            let chosenMonth = ("0" + $('#months-group').val()).slice(-2);
+                let chosenYear = $('#years-group').val();
+                let chosenMonth = ("0" + $('#months-group').val()).slice(-2);
 
-            $.when(self.collectionDays.fetch({url: '/api/uframe/media/'+ref_des+'/da/'+chosenYear+'/'+chosenMonth})).done(function (days) {
-                let firstDay = ("0" + days.days[0]).slice(-2);
-                let lastDay = ("0" + days.days.slice(-1)[0]).slice(-2);
-                first_date = [chosenYear, chosenMonth, firstDay].join("-");
-                last_date = [chosenYear, chosenMonth, lastDay].join("-");
+                $.when(self.collectionDays.fetch({url: '/api/uframe/media/'+ref_des+'/da/'+chosenYear+'/'+chosenMonth})).done(function (days) {
+                    let firstDay = ("0" + days.days[0]).slice(-2);
+                    let lastDay = ("0" + days.days.slice(-1)[0]).slice(-2);
+                    first_date = [chosenYear, chosenMonth, firstDay].join("-");
+                    last_date = [chosenYear, chosenMonth, lastDay].join("-");
 
-                $('#media-spinner').show();
-                $.when(self.collection.fetch({url: '/api/uframe/media/'+ref_des+'/range/'+first_date+'/'+last_date})).done(function(data){
-                    //console.log(data);
-                    self.render({'first_time': false})
+                    $('#media-spinner').show();
+                    $.when(self.collection.fetch({url: '/api/uframe/media/'+ref_des+'/range/'+first_date+'/'+last_date})).done(function(data){
+                        //console.log(data);
+                        self.render({'first_time': false})
+                    });
                 });
             });
+        }
+
+    },
+    daysButtonClick:function(event){
+        let self = this;
+
+        // Clicked on a year
+        // Go get the day
+        let $button = $( event.currentTarget );
+        let selectedDay = event.target.selectedOptions[0].title;
+        self.selectedDay = selectedDay;
+        let ref_des = event.target.selectedOptions[0].dataset['ref_des'];
+        console.log(selectedDay);
+        console.log(ref_des);
+
+        wavesurfer.pause();
+
+        $('#media-spinner').show();
+        $('#wav-player-div').show();
+
+        $.when(self.collectionHydbb.fetch({url: '/api/uframe/media/hydbb_test/'+ref_des+'/'+self.selectedYear+'/'+self.selectedMonth+'/'+self.selectedDay})).done(function(data){
+            console.log(data);
+            self.render({'first_time': false})
         });
     },
     filterButtonClick:function(event){
@@ -303,6 +390,7 @@ var CamImageView2 = Backbone.View.extend({
 
         let $button = $( event.currentTarget );
         let instrumentGroup = event.target.selectedOptions[0].title;
+        console.log(instrumentGroup);
         let long_name = event.target.selectedOptions[0].value;
 
         $('.element-item').remove();
@@ -314,22 +402,44 @@ var CamImageView2 = Backbone.View.extend({
         $('#selected-year-btn').empty();
         $('#selected-year-btn').append('Select Year');
         $('#selected-month-btn').empty();
+        $('#selected-month-btn').append('Select Month');
+        $('#selected-day-btn').empty();
+        $('#selected-day-btn').append('Select Day');
 
         $('#selected-ref-des').empty();
         $('#selected-ref-des').append(instrumentGroup);
 
-        self.collectionMap.reset();
-        $.when(self.collectionMap.fetch({url: '/api/uframe/media/'+instrumentGroup+'/da/map'})).done(function(data){
-            //console.log(data);
-            self.daMap = data;
-            $('#years-group').empty();
-            //$('#years-group').append('<button class="button" data-filter="*" title="*">All Years</button>');
+        wavesurfer.pause();
 
-            $('#years-group').append('<option class="button" title="Select Year" disabled selected>Select Year</option>');
-            $.each(data.map, function(year, months){
-                $('#years-group').append('<option class="button" data-filter=".'+year+'" title="'+year+'" data-ref_des="'+instrumentGroup+'">'+year+'</option>');
+        self.collectionMap.reset();
+        if (self.selectedInstrumentGroup === 'HYDBB') {
+            $('#days-group-drop').show();
+            // TODO: Change to keryx API to get the years listing
+            // $.when(self.collectionMap.fetch({url: '/api/uframe/media/'+instrumentGroup+'/da/map'})).done(function(data){
+            //     console.log(data);
+                let years = ['2016'];
+                $('#years-group').empty();
+                //$('#years-group').append('<button class="button" data-filter="*" title="*">All Years</button>');
+
+                $('#years-group').append('<option class="button" title="Select Year" disabled selected>Select Year</option>');
+                $.each(years, function(key, year){
+                    $('#years-group').append('<option class="button" data-filter=".'+year+'" title="'+year+'" data-ref_des="'+instrumentGroup+'">'+year+'</option>');
+                });
+            // });
+        } else {
+            $.when(self.collectionMap.fetch({url: '/api/uframe/media/'+instrumentGroup+'/da/map'})).done(function(data){
+                //console.log(data);
+                self.daMap = data;
+                $('#years-group').empty();
+                //$('#years-group').append('<button class="button" data-filter="*" title="*">All Years</button>');
+
+                $('#years-group').append('<option class="button" title="Select Year" disabled selected>Select Year</option>');
+                $.each(data.map, function(year, months){
+                    $('#years-group').append('<option class="button" data-filter=".'+year+'" title="'+year+'" data-ref_des="'+instrumentGroup+'">'+year+'</option>');
+                });
             });
-        });
+        }
+
     },
     add:function(subview){
         this.$el.find('.thumbnail-grid').append(subview.el);
@@ -340,8 +450,13 @@ var CamImageView2 = Backbone.View.extend({
         let self = this;
         this.$el.html(this.template(options));
 
+        $('#wav-player-div').hide();
+        wavesurfer.pause();
+
         if(options['first_time']){
+            $('#days-group-drop').hide();
             $('#media-spinner').hide();
+            $('#wav-player-div').hide();
             // init Isotope
             self.$thumbnailgrid = $('.thumbnail-grid').isotope({
                 itemSelector: '.element-item',
@@ -397,6 +512,10 @@ var CamImageView2 = Backbone.View.extend({
                self.monthsButtonClick(event)
             });
 
+            $('[id^=days-group]').change(function(event){
+               self.daysButtonClick(event)
+            });
+
             // change is-checked class on buttons
             /*$('.button-group').each( function( i, buttonGroup ) {
                 var $buttonGroup = $( buttonGroup );
@@ -410,16 +529,39 @@ var CamImageView2 = Backbone.View.extend({
             //$('#inst-type-menu-btn').click();
             //$('#inst-type-menu-btn').addClass('is-checked');
         } else {
-            if(this.collection.length > 0) {
-                // Loop through the media and add to the image gallery
-                this.collection.each(function (model) {
-                    let subview = new CamImageItemView2({
-                        model: model
+            if (self.selectedInstrumentGroup === 'HYDBB') {
+                $('#wav-player-div').show();
+                if(this.collectionHydbb.length > 0) {
+                    // Loop through the media and add to the image gallery
+                    this.collectionHydbb.each(function (model) {
+                        // console.log(model);
+                        model.attributes['reference_designator'] = self.selectedRefDes;
+                        model.attributes['date'] = self.selectedYear+'-'+self.selectedMonth+'-'+self.selectedDay;
+                        model.attributes['baseUrl'] = 'http://ec2-3-213-152-122.compute-1.amazonaws.com:8088';
+                        model.attributes['thumbnail'] = 'http://ec2-3-213-152-122.compute-1.amazonaws.com:8088'+model.attributes['thumbnail_path'];
+                        model.attributes['url'] = 'http://ec2-3-213-152-122.compute-1.amazonaws.com:8088'+model.attributes['thumbnail_path'];
+
+                        let subview = new CamImageItemView3({
+                            model: model
+                        });
+                        // subview.setElement($('#cam-image-grid'));
+                        self.add(subview);
                     });
-                    // subview.setElement($('#cam-image-grid'));
-                    self.add(subview);
-                });
+                }
+            } else {
+                if(this.collection.length > 0) {
+                    // Loop through the media and add to the image gallery
+                    this.collection.each(function (model) {
+                        console.log(model);
+                        let subview = new CamImageItemView2({
+                            model: model
+                        });
+                        // subview.setElement($('#cam-image-grid'));
+                        self.add(subview);
+                    });
+                }
             }
+
             $('#media-spinner').hide();
         }
     }
@@ -464,6 +606,55 @@ var CamImageItemView2 = Backbone.View.extend({
         }
     },
     template: JST['ooiui/static/js/partials/CamImageItem2.html'],
+    render: function(options) {
+        this.setElement(this.template({model:this.model}));
+    }
+});
+
+var CamImageItemView3 = Backbone.View.extend({
+    //className: 'element-item',
+    events: {
+        "click a" : "itemClick"
+    },
+    initialize: function() {
+        _.bindAll(this, "render","itemClick");
+        this.render();
+    },
+    itemClick:function(evt){
+        var self = this;
+        evt.preventDefault();
+        //console.log(self.model);
+        if (!_.isUndefined(self.model.get('url'))){
+            var text = "<small>"+self.model.get("date")+"</small>";
+            let wav_file = self.model.get("url").replace('.png', '.wav').replace('thumbnails', 'wav_files');
+            console.log(wav_file);
+            wavesurfer.load(wav_file);
+            $('#wav-player-div').show();
+            bootbox.dialog({
+                title: "<h5>"+self.model.get("reference_designator")+"</h5>"+text,
+                size:'large',
+                message: "<a class='download-full-image' href='"+ self.model.get('url') +"' download='" + self.model.get('filename') +"' title='"+self.model.get("date")+"'><img height='100%' width='100%' src='" + self.model.get('url') + "'></a>",
+                buttons: {
+                    success: {
+                        label: "Download Image",
+                        className: "btn-success",
+                        callback: function() {
+                            $(this).find('.download-full-image img').click();
+                        }
+                    },
+                    main: {
+                        label: "Close",
+                        className: "btn-default",
+                        callback: function() {
+                            //nothing and close
+                            //wavesurfer.pause();
+                        }
+                    }
+                }
+            });
+        }
+    },
+    template: JST['ooiui/static/js/partials/CamImageItem3.html'],
     render: function(options) {
         this.setElement(this.template({model:this.model}));
     }

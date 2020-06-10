@@ -534,6 +534,12 @@ def get_cam_images():
     response = requests.get(app.config['SERVICES_URL'] + '/uframe/get_cam_images', auth=(token, ''), data=request.args)
     return response.text, response.status_code
 
+@app.route('/api/uframe/media/hydbb_test/<string:ref_des>/<string:year>/<string:month>/<string:day>', methods=['GET'])
+def get_hydbb_test(ref_des, year, month, day):
+    token = get_login()
+    response = requests.get('http://ec2-3-213-152-122.compute-1.amazonaws.com:8000/mediaserver/view_get_thumbnails?instrument_id=%s&year=%s&month=%s&day=%s' % (ref_des, year, month, day), auth=(token, ''), data=request.args)
+    return response.text, response.status_code
+
 @app.route('/api/uframe/media/test', methods=['GET'])
 def get_uframe_media_range_test():
     token = get_login()
